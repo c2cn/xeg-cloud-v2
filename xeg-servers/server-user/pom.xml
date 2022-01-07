@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.xeg</groupId>
+        <artifactId>xeg-servers</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.xeg.servers</groupId>
+    <artifactId>server-user</artifactId>
+    
+    <properties>
+		<sharding-sphere.version>4.0.0-RC2</sharding-sphere.version>
+	</properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xeg.servers</groupId>
+            <artifactId>server-user-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.xeg.servers</groupId>
+            <artifactId>server-order-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- sharding 配置 -->
+		<dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>${sharding-sphere.version}</version>
+        </dependency>
+
+        <!-- 使用XA事 -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-transaction-xa-core</artifactId>
+            <version>${sharding-sphere.version}</version>
+        </dependency>
+		
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <!--        mybatis-plus代码生成器 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <!-- 模板引擎 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>2.0</version>
+        </dependency>
+		        
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xeg.cores</groupId>
+            <artifactId>core-redis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version> <!-- or whatever current version -->
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>product</id>
+            <properties>
+                <project.release.version>1.0</project.release.version>
+            </properties>
+        </profile>
+    </profiles>
+
+    <!-- 发布选项: id必须与setting.xml文件中server的id相同  -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>releases</name>
+            <url>http://120.48.25.240:10081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>snapshots</name>
+            <url>http://120.48.25.240:10081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>

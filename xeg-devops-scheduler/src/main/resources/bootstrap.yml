@@ -1,0 +1,58 @@
+server:
+  port: 3200
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: ${PROFILE_ACTIVE:dev}
+  application:
+    name: devops-scheduler
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        prefix: ${spring.application.name}
+        shared-configs:
+          - cloud-common.yml
+          - cloud-redis.yml
+          - cloud-mysql.yml
+      discovery:
+        cluster-name: ${CLUSTER_NAME:QD}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: 7488a04b-fed1-4816-b7ec-b2ab5a752294
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: 7488a04b-fed1-4816-b7ec-b2ab5a752294
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: 02de1dda-44e8-4f9c-95fe-24630303dd04
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: 02de1dda-44e8-4f9c-95fe-24630303dd04
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: f0c91976-761b-4106-a52f-caede172794b
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: f0c91976-761b-4106-a52f-caede172794b

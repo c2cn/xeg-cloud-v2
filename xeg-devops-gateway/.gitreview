@@ -1,0 +1,4 @@
+[gerrit]
+host=180.76.248.31
+port=29418
+project=devops-gateway

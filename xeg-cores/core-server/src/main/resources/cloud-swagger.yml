@@ -1,0 +1,26 @@
+#Swagger属性配置
+swagger:
+  enable: true #是否开启swagger 文档
+  title: 小二哥文档管理中心
+  description: 小二哥文档管理
+  license: Powered by xeg-v2
+  service-url: https://www.xiaoergekeji.com
+  contact-name: xulp
+  contact-url: https://www.xiaoergekeji.com
+  contact-email: xulp951125@gmail.com
+# knife4j配置
+knife4j:
+  enable: ${swagger.enable}
+  # 开启生产环境屏蔽
+  production: false
+  basic:
+    enable: true
+    username: admin
+    password: xiaoerge
+  setting:
+    # 是否不显示Knife4j默认的footer，默认为true(显示)
+    enableFooter: false
+    # 是否自定义Footer，默认为false(非自定义)
+    enableFooterCustom: true
+    # 自定义Footer内容,支持Markdown语法
+    footerCustomContent: Apache License 2.0 | Copyright  2021-[青岛小二哥科技有限公司]

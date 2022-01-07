@@ -1,0 +1,76 @@
+server:
+  port: 16700
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: ${PROFILE_ACTIVE:dev}
+  application:
+    name: server-search
+  devtools:
+    restart:
+      enabled: false  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+    freemarker:
+      cache: false    #页面不加载缓存，修改即时生效
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        prefix: ${spring.application.name}
+        shared-configs:
+          - cloud-common.yml
+          - cloud-redis.yml
+          - cloud-es.yml
+      #          - cloud-feign.yml
+      #          - cloud-mongo.yml
+      #          - cloud-seata.yml
+      #          - cloud-rabbit.yml
+      discovery:
+        cluster-name: ${CLUSTER_NAME:QD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    com.alibaba.nacos.client.naming: error
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: 7488a04b-fed1-4816-b7ec-b2ab5a752294
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: 7488a04b-fed1-4816-b7ec-b2ab5a752294
+---
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: 02de1dda-44e8-4f9c-95fe-24630303dd04
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: 02de1dda-44e8-4f9c-95fe-24630303dd04
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.102.130.110:8848
+        namespace: f0c91976-761b-4106-a52f-caede172794b
+      config:
+        server-addr: 39.102.130.110:8848
+        namespace: f0c91976-761b-4106-a52f-caede172794b

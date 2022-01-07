@@ -1,0 +1,40 @@
+//git凭证ID
+def git_auth = "bbc65896-3d7c-46d6-aedd-f5dfab7b5784"
+//git的url地址
+def git_url = "http://180.76.248.31:10080/xeg-cloud/app-agent.git"
+//harbor的url地址
+def harbor_url = "192.168.16.6:20081"
+//镜像库项目名称
+def harbor_project = "xeg-cloud"
+//服务名
+def project_name = "app-agent"
+//定义镜像名称
+def imageName = "${harbor_url}/${harbor_project}/${project_name}:${BUILD_NUMBER}"
+//命名空间
+def namespace = "devops"
+//端口
+def CONTAINER_PORT = 4100
+def NODE_PORT = 30410
+
+node {
+    stage('拉取代码') {
+        git branch: '${branch}', credentialsId: "${git_auth}", url: "${git_url}"
+    }
+    stage('打包') {
+        sh "$buildtool"
+    }
+    stage('构建上传镜像') {
+        sh "docker login -u agent -p Harbor12345 ${harbor_url}"
+        sh "docker build -t ${imageName} -f Dockerfile ."
+        sh "docker push ${imageName}"
+        sh "docker rmi ${imageName}"
+    }
+    stage('部署') {
+        sh "sed -i 's#__namespace__#${namespace}#g' k8s.yml"
+        sh "sed -i 's#__appname__#${project_name}#g' k8s.yml"
+        sh "sed -i 's#__containerport__#${CONTAINER_PORT}#g' k8s.yml"
+        sh "sed -i 's#__nodeport__#${NODE_PORT}#g' k8s.yml"
+        sh "sed -i 's#__imagename__#${imageName}#g' k8s.yml"
+        sh "kubectl apply -f k8s.yml"
+    }
+}

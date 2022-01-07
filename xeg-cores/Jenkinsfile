@@ -1,0 +1,27 @@
+//git凭证ID
+def git_auth = "bbc65896-3d7c-46d6-aedd-f5dfab7b5784"
+//git的url地址
+def git_url = "http://180.76.248.31:10080/xeg-cloud/cloud-core.git"
+//harbor的url地址
+def harbor_url = "192.168.16.6:20081"
+//镜像库项目名称
+def harbor_project = "xeg-cloud"
+//服务名
+def project_name = "cloud-core"
+//定义镜像名称
+def imageName = "${harbor_url}/${harbor_project}/${project_name}:${BUILD_NUMBER}"
+//命名空间
+def namespace = "devops"
+//端口
+def CONTAINER_PORT = 4400
+def NODE_PORT = 30440
+
+
+node {
+    stage('拉取代码') {
+        git branch: '${branch}', credentialsId: "${git_auth}", url: "${git_url}"
+    }
+    stage('deploy') {
+        sh "$buildtool"
+    }
+}

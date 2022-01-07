@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    k8s-app: __appname__
+  name: __appname__
+  namespace: __namespace__
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: __appname__
+  template:
+    metadata:
+      labels:
+        k8s-app: __appname__
+      namespace: __namespace__
+      name: __appname__
+    spec:
+      containers:
+        - name: __appname__
+          image: __imagename__
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: __containerport__
+              name: web
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /agent/actuator/health
+              port: web
+            failureThreshold: 30
+            periodSeconds: 20
+      imagePullSecrets:
+        - name: harbor
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: __appname__
+  name: __appname__
+  namespace: __namespace__
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: __appname__
+  name: __appname__
+  namespace: __namespace__
+spec:
+  type: NodePort
+  ports:
+    - name: web
+      port: __containerport__
+      targetPort: __containerport__
+      nodePort: __nodeport__
+  selector:
+    k8s-app: __appname__
